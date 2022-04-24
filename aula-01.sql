@@ -4,12 +4,9 @@
 SET SERVEROUTPUT ON
 
 DECLARE
-    name     VARCHAR2(100);
-    lastname VARCHAR2(100);
+    X CONSTANT NUMBER := 10;
+    Z NUMBER NOT NULL := 20;
 BEGIN
-    name := 'JOHN';
-    lastname := 'CONNORS';
-    dbms_output.put_line(name);
-    dbms_output.put_line(lastname);
-    dbms_output.put_line(name || ' ' || lastname);
+    DBMS_OUTPUT.PUT_LINE(X);
+    DBMS_OUTPUT.PUT_LINE(Z);
 END;
