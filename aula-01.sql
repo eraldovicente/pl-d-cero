@@ -1,5 +1,10 @@
+-------------------
+-- BLOCO ANÔNIMO --
+-------------------
+SET SERVEROUTPUT ON
 BEGIN
 
-NULL;
+DBMS_OUTPUT.PUT_LINE(100);
+DBMS_OUTPUT.PUT_LINE('AAAA' || 'BBBB');
 
 END;
