@@ -200,18 +200,54 @@ END;
 -- EJEMPLO --
 -------------
 DECLARE
-    EMPL EMPLOYEES%ROWTYPE;
+    empl employees%rowtype;
 BEGIN
-    SELECT * INTO EMPL
-    FROM EMPLOYEES
-    WHERE EMPLOYEE_ID=100;
-    
-    DBMS_OUTPUT.PUT_LINE(EMPL.FIRST_NAME);
+    SELECT
+        *
+    INTO empl
+    FROM
+        employees
+    WHERE
+        employee_id = 100;
+
+    dbms_output.put_line(empl.first_name);
 EXCEPTION
-    WHEN EX1 THEN
+    WHEN ex1 THEN
         NULL;
-    WHEN EX2 THEN
+    WHEN ex2 THEN
         NULL;
     WHEN OTHERS THEN
         NULL;
+END;
+
+------------------------------
+-- EXCEPCIONES PREDEFINIDAS --
+------------------------------
+
+-------------
+DECLARE
+    empl employees%rowtype;
+BEGIN
+    SELECT
+        *
+    INTO empl
+    FROM
+        employees
+    WHERE
+        employee_id = 10000;
+
+    dbms_output.put_line(empl.first_name);
+EXCEPTION
+
+-- NO_DATA_FOUND ORA-01403
+-- TOO_MANY_ROWS ORA-01422
+-- ZERO_DIVIDE
+-- DUP_VAL_ON_INDEX
+
+    WHEN no_data_found THEN
+        dbms_output.put_line('ERROR, EMPLEADO INEXISTENTE');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('ERROR, DEMASIADOS EMPLEADOS');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('ERROR ');
 END;
