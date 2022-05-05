@@ -169,3 +169,25 @@ BEGIN
 
     COMMIT;
 END;
+
+------------------------------------
+-- INTRODUCCIÓN A LAS EXCEPCIONES --
+------------------------------------
+
+DECLARE
+    empl employees%rowtype;
+BEGIN
+    SELECT
+        *
+    INTO empl
+    FROM
+        employees
+    WHERE
+        employee_id = 100;
+
+    dbms_output.put_line(empl.first_name);
+END;
+
+-- TIPOS DE EXCEPCIONES:
+-- ORACLE
+-- USUARIO
