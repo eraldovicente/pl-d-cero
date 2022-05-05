@@ -118,3 +118,21 @@ BEGIN
     dbms_output.put_line(empleado.salary * 100);
     dbms_output.put_line(empleado.first_name);
 END;
+
+-------------
+-- INSERTS --
+-------------
+
+DECLARE
+    col1 test.c1%TYPE;
+BEGIN
+    col1 := 10;
+    INSERT INTO test (
+        c1,
+        c2
+    ) VALUES (
+        col1,
+        'LILIAN'
+    );
+    COMMIT;
+END;
