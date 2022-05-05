@@ -134,5 +134,23 @@ BEGIN
         col1,
         'LILIAN'
     );
+
+    COMMIT;
+END;
+
+-------------
+-- UPDATES --
+-------------
+
+DECLARE
+    t test.c1%TYPE;
+BEGIN
+    t := 10;
+    UPDATE test
+    SET
+        c2 = 'PIKACHU'
+    WHERE
+        c1 = t;
+
     COMMIT;
 END;
