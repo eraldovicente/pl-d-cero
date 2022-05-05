@@ -174,6 +174,8 @@ END;
 -- INTRODUCCIÓN A LAS EXCEPCIONES --
 ------------------------------------
 
+
+
 DECLARE
     empl employees%rowtype;
 BEGIN
@@ -191,3 +193,25 @@ END;
 -- TIPOS DE EXCEPCIONES:
 -- ORACLE
 -- USUARIO
+
+---------------------------------
+-- SINTAXIS DE LAS EXCEPCIONES --
+---------------------------------
+-- EJEMPLO --
+-------------
+DECLARE
+    EMPL EMPLOYEES%ROWTYPE;
+BEGIN
+    SELECT * INTO EMPL
+    FROM EMPLOYEES
+    WHERE EMPLOYEE_ID=100;
+    
+    DBMS_OUTPUT.PUT_LINE(EMPL.FIRST_NAME);
+EXCEPTION
+    WHEN EX1 THEN
+        NULL;
+    WHEN EX2 THEN
+        NULL;
+    WHEN OTHERS THEN
+        NULL;
+END;
