@@ -34,13 +34,14 @@ END;
 
 DECLARE
     done BOOLEAN := false;
-    X NUMBER := 0;
+    x    NUMBER := 0;
 BEGIN
-    WHILE X < 10 LOOP
-        DBMS_OUTPUT.PUT_LINE(X);
-        X := X + 1;
-        EXIT WHEN X = 5;
+    WHILE x < 10 LOOP
+        dbms_output.put_line(x);
+        x := x + 1;
+        EXIT WHEN x = 5;
     END LOOP;
+
     WHILE done LOOP
         dbms_output.put_line('NO IMPRIMAS ESTO.');
         done := true;
@@ -49,6 +50,7 @@ BEGIN
         dbms_output.put_line('HE PASADO POR AQUI');
         done := true;
     END LOOP;
+
 END;
 /
 
@@ -57,19 +59,41 @@ END;
 ------------------
 
 DECLARE
-    P VARCHAR2(30);
-    N PLS_INTEGER := 5;
+    p VARCHAR2(30);
+    n PLS_INTEGER := 5;
 BEGIN
-    FOR J IN 2..ROUND(SQRT(N)) LOOP
-        IF N MOD J = 0 THEN
-            P := ' NO ES UN NÚMERO PRIMO';
-            GOTO PRINT_NOW;
+    FOR j IN 2..round(sqrt(n)) LOOP
+        IF n MOD j = 0 THEN
+            p := ' NO ES UN NÚMERO PRIMO';
+            GOTO print_now;
         END IF;
     END LOOP;
-    
-    P := ' ES UN NÚMERO PRIMO';
-    
-    <<PRINT_NOW>>
-    DBMS_OUTPUT.PUT_LINE(TO_CHAR(N) || P);
+
+    p := ' ES UN NÚMERO PRIMO';
+    << print_now >> dbms_output.put_line(to_char(n)
+                                         || p);
 END;
 /
+
+------------------------------
+-- SELECTS DENTRO DE PL/SQL --
+------------------------------
+
+DECLARE
+    salario NUMBER;
+    nombre  employees.first_name%TYPE;
+BEGIN
+    SELECT
+        salary,
+        first_name
+    INTO
+        salario,
+        nombre
+    FROM
+        employees
+    WHERE
+        employee_id = 100;
+
+    dbms_output.put_line(salario);
+    dbms_output.put_line(nombre);
+END;
