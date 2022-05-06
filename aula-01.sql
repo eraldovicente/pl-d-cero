@@ -400,3 +400,23 @@ EXCEPTION
         dbms_output.put_line('ERROR INDEFINIDO');
 END;
 /
+
+-------------------------------------
+-- COMANDO RAISE_APPLICATION_ERROR --
+-------------------------------------
+
+DECLARE
+    REGN NUMBER;
+    REGT VARCHAR2(200);
+BEGIN
+    REGN:=101;
+    REGT:='ASIA';
+    IF REGN > 100 THEN
+        -- EL CODIGO DEBE ESTAR ENTRE -20000 Y -20999
+        RAISE_APPLICATION_ERROR(-20001,'LA ID NO PUEDE SER MAYOR DE 100');
+    ELSE
+        INSERT INTO REGIONS VALUES (REGN,REGT);
+        COMMIT;
+    END IF;
+END;
+/
