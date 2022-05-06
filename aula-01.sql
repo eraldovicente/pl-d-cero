@@ -260,7 +260,7 @@ DECLARE
     mi_excep EXCEPTION;
     PRAGMA exception_init ( mi_excep, -937 );
     v1 NUMBER;
-    v2 NUMBER; 
+    v2 NUMBER;
 BEGIN
     SELECT
         employee_id,
@@ -277,4 +277,33 @@ EXCEPTION
         dbms_output.put_line('FUNCION DE GRUPO INCORRECTA');
     WHEN OTHERS THEN
         dbms_output.put_line('ERROR INDEFINIDO');
+END;
+
+-----------------------
+-- SQLCODE Y SQLERRM --
+-----------------------
+
+DECLARE
+    empl    employees%rowtype;
+    code    NUMBER;
+    message VARCHAR2(100);
+BEGIN
+    SELECT
+        *
+    INTO empl
+    FROM
+        employees;
+
+    dbms_output.put_line(empl.salary);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line(sqlcode);
+        dbms_output.put_line(sqlerrm);
+        code := sqlcode;
+        message := sqlerrm;
+        INSERT INTO errors VALUES (
+            code,
+            message
+        );
+
 END;
