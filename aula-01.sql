@@ -336,3 +336,28 @@ EXCEPTION
 
         COMMIT;
 END;
+
+--------------------------------
+-- Excepciones personalizadas --
+-- por el desarollador        --
+--------------------------------
+
+DECLARE
+    REG_MAX EXCEPTION;
+    REGN NUMBER;
+    REGT VARCHAR2(200);
+BEGIN
+    REGN:=101;
+    REGT:='ASIA';
+    IF REGN > 100 THEN
+        RAISE REG_MAX;
+    ELSE
+        INSERT INTO REGIONS VALUES (REGN,REGT);
+    END IF;
+EXCEPTION
+    WHEN REG_MAX THEN
+        DBMS_OUTPUT.PUT_LINE('LA REGION NO PUEDE SER MAYOR DE 100.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('ERROR INDEFINIDO');
+END;
+/
