@@ -406,17 +406,58 @@ END;
 -------------------------------------
 
 DECLARE
-    REGN NUMBER;
-    REGT VARCHAR2(200);
+    regn NUMBER;
+    regt VARCHAR2(200);
 BEGIN
-    REGN:=101;
-    REGT:='ASIA';
-    IF REGN > 100 THEN
+    regn := 101;
+    regt := 'ASIA';
+    IF regn > 100 THEN
         -- EL CODIGO DEBE ESTAR ENTRE -20000 Y -20999
-        RAISE_APPLICATION_ERROR(-20001,'LA ID NO PUEDE SER MAYOR DE 100');
+        raise_application_error(
+                               -20001,
+                               'LA ID NO PUEDE SER MAYOR DE 100'
+        );
     ELSE
-        INSERT INTO REGIONS VALUES (REGN,REGT);
+        INSERT INTO regions VALUES (
+            regn,
+            regt
+        );
+
         COMMIT;
     END IF;
+
 END;
 /
+
+--------------------
+-- PL/SQL RECORDS --
+--------------------
+
+DECLARE
+    TYPE empleado IS RECORD (
+        nombre  VARCHAR2(100),
+        salario NUMBER,
+        fecha   employees.hire_date%TYPE,
+        datos   employees%rowtypes
+    );
+    emple1 empleado;
+BEGIN
+    SELECT
+        *
+    INTO emple1.datos
+    FROM
+        employees
+    WHERE
+        employee_id = 100;
+
+    emple1.nombre := emple1.datos.first_name
+                     || ' '
+                     || emple1.datos.last_name;
+
+    emple1.salario := emple1.datos.salary * 0.80;
+    emple1.fecha := emple1.datos.hire_date;
+    dbms_output.put_line(emple1.nombre);
+    dbms_output.put_line(emple1.salario);
+    dbms_output.put_line(emple1.fecha);
+    dbms_output.put_line(emple1.datos.first_name);
+END;
