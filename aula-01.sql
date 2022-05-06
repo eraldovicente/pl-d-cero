@@ -343,21 +343,60 @@ END;
 --------------------------------
 
 DECLARE
-    REG_MAX EXCEPTION;
-    REGN NUMBER;
-    REGT VARCHAR2(200);
+    reg_max EXCEPTION;
+    regn NUMBER;
+    regt VARCHAR2(200);
 BEGIN
-    REGN:=101;
-    REGT:='ASIA';
-    IF REGN > 100 THEN
-        RAISE REG_MAX;
+    regn := 101;
+    regt := 'ASIA';
+    IF regn > 100 THEN
+        RAISE reg_max;
     ELSE
-        INSERT INTO REGIONS VALUES (REGN,REGT);
+        INSERT INTO regions VALUES (
+            regn,
+            regt
+        );
+
     END IF;
+
 EXCEPTION
-    WHEN REG_MAX THEN
-        DBMS_OUTPUT.PUT_LINE('LA REGION NO PUEDE SER MAYOR DE 100.');
+    WHEN reg_max THEN
+        dbms_output.put_line('LA REGION NO PUEDE SER MAYOR DE 100.');
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('ERROR INDEFINIDO');
+        dbms_output.put_line('ERROR INDEFINIDO');
+END;
+/
+
+-------------------------------
+-- ÁMBITO DE LAS EXCEPCIONES --
+-------------------------------
+
+
+DECLARE
+    regn NUMBER;
+    regt VARCHAR2(200);
+BEGIN
+    regn := 101;
+    regt := 'ASIA';
+    DECLARE BEGIN
+        IF regn > 100 THEN
+            RAISE reg_max;
+        ELSE
+            INSERT INTO regions VALUES (
+                regn,
+                regt
+            );
+
+        END IF;
+    EXCEPTION
+        WHEN reg_max THEN
+            dbms_output.put_line('LA REGION NO PUEDE SER MAYOR DE 100.');
+    END;
+
+EXCEPTION
+   /* WHEN reg_max THEN
+        dbms_output.put_line('LA REGION NO PUEDE SER MAYOR DE 100.');*/
+    WHEN OTHERS THEN
+        dbms_output.put_line('ERROR INDEFINIDO');
 END;
 /
