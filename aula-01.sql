@@ -541,7 +541,7 @@ BEGIN
         employees
     WHERE
         employee_id = 100;
-    
+
     SELECT
         *
     INTO
@@ -562,19 +562,27 @@ END;
 --------------------------------------------
 
 DECLARE
-    TYPE DEPARTAMENTOS IS TABLE OF
-        DEPARTMENTS%ROWTYPE
-    INDEX BY PLS_INTEGER;
-    
-    DEPTS DEPARTAMENTOS;
+    TYPE departamentos IS
+        TABLE OF departments%rowtype INDEX BY PLS_INTEGER;
+    depts departamentos;
 BEGIN
-    FOR I IN 1..10 LOOP
-    SELECT * INTO DEPTS(I) FROM DEPARTMENTS WHERE DEPARTMENT_ID=I*10;
+    FOR i IN 1..10 LOOP
+        SELECT
+            *
+        INTO
+            depts
+        (i)
+        FROM
+            departments
+        WHERE
+            department_id = i * 10;
+
     END LOOP;
-    
-    FOR I IN DEPTS.FIRST..DEPTS.LAST LOOP
-        DBMS_OUTPUT.PUT_LINE(DEPTS(I).DEPARTMENT_NAME);
+
+    FOR i IN depts.first..depts.last LOOP
+        dbms_output.put_line(depts(i).department_name);
     END LOOP;
+
 END;
 /
 
@@ -587,21 +595,34 @@ SQL%FOUND
 SQL%NOTFOUND
 SQL%ROWCOUNT*/
 SET SERVEROUTPUT ON
+
 DECLARE
-    X NUMBER;
+    x NUMBER;
 BEGIN
-    UPDATE TEST SET C2='P' WHERE C1=11;
-    DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT);
-    IF SQL%FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('ENCONTRADO');
+    UPDATE test
+    SET
+        c2 = 'P'
+    WHERE
+        c1 = 11;
+
+    dbms_output.put_line(SQL%rowcount);
+    IF SQL%found THEN
+        dbms_output.put_line('ENCONTRADO');
     END IF;
-    IF SQL%NOTFOUND THEN
-        DBMS_OUTPUT.PUT_LINE('NO ENCONTRADO');
+    IF SQL%notfound THEN
+        dbms_output.put_line('NO ENCONTRADO');
     END IF;
-    SELECT C1 INTO X FROM TEST WHERE C1=1000;
-        IF SQL%NOTFOUND THEN
-            DBMS_OUTPUT.PUT_LINE('FILA NO EXISTE');
-        END IF;
+    SELECT
+        c1
+    INTO x
+    FROM
+        test
+    WHERE
+        c1 = 1000;
+
+    IF SQL%notfound THEN
+        dbms_output.put_line('FILA NO EXISTE');
+    END IF;
 END;
 
 ---------------------
@@ -609,15 +630,20 @@ END;
 ---------------------
 
 DECLARE
-    CURSOR C1 IS SELECT * FROM REGIONS;
-    V1 REGIONS%ROWTYPE;
+    CURSOR c1 IS
+    SELECT
+        *
+    FROM
+        regions;
+
+    v1 regions%rowtype;
 BEGIN
-    OPEN C1;
-    FETCH C1 INTO V1;
-    DBMS_OUTPUT.PUT_LINE(V1.REGION_NAME);
-    FETCH C1 INTO V1;
-    DBMS_OUTPUT.PUT_LINE(V1.REGION_NAME);
-    CLOSE C1;
+    OPEN c1;
+    FETCH c1 INTO v1;
+    dbms_output.put_line(v1.region_name);
+    FETCH c1 INTO v1;
+    dbms_output.put_line(v1.region_name);
+    CLOSE c1;
 END;
 /
 
@@ -637,14 +663,48 @@ C1%ROWCOUNT
 ------------------------------------------
 
 DECLARE
-    CURSOR C1 IS SELECT * FROM REGIONS;
-    V1 REGIONS%ROWTYPE;
+    CURSOR c1 IS
+    SELECT
+        *
+    FROM
+        regions;
+
+    v1 regions%rowtype;
 BEGIN
-    OPEN C1;
+    OPEN c1;
     LOOP
-        FETCH C1 INTO V1;
-        EXIT WHEN C1%NOTFOUND;
-        DBMS_OUTPUT.PUT_LINE(V1.REGION_NAME);
+        FETCH c1 INTO v1;
+        EXIT WHEN c1%notfound;
+        dbms_output.put_line(v1.region_name);
     END LOOP;
-    CLOSE C1;
+
+    CLOSE c1;
+END;
+
+-----------------------------------------
+-- RECORRER UN CURSOR CON EL BUCLE FOR --
+-----------------------------------------
+
+DECLARE
+    CURSOR C1 IS SELECT * FROM REGIONS;
+    V1 REGIONS*
+rowtype;
+
+BEGIN
+    OPEN c1;
+    LOOP
+        FETCH c1 INTO v1;
+        EXIT WHEN c1%notfound;
+        dbms_output.put_line(v1.region_name);
+    END LOOP;
+
+    CLOSE c1;
+    
+    ---------------
+    -- BUCLE FOR --
+    ---------------
+
+    FOR i IN c1 LOOP
+        dbms_output.put_line(i.region_name);
+    END LOOP;
 END;
