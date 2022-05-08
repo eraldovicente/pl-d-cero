@@ -505,3 +505,53 @@ BEGIN
         region_id = 1;
 
 END;
+
+-------------------------------------
+-- TRABAJAR CON ARRAYS ASOCIATIVOS --
+-------------------------------------
+
+DECLARE
+    TYPE departamentos IS
+        TABLE OF departments.department_name%TYPE INDEX BY PLS_INTEGER;
+    TYPE empleados IS
+        TABLE OF employees%rowtype INDEX BY PLS_INTEGER;
+    depts  departamentos;
+    emples empleados;
+BEGIN
+    -- TIPO NAME
+    depts(1) := 'INFORMATICA';
+    depts(2) := 'RRHH';
+    dbms_output.put_line(depts(1));
+    dbms_output.put_line(depts(2));
+    dbms_output.put_line(depts.last);
+    dbms_output.put_line(depts.first);
+    IF depts.exits(3) THEN
+        dbms_output.put_line(depts(3));
+    ELSE
+        dbms_output.put_line('ESE VALOR NO EXISTE');
+    END IF;
+    
+    -- TIPO COMPUESTO
+    SELECT
+        *
+    INTO
+        emples
+    (1)
+    FROM
+        employees
+    WHERE
+        employee_id = 100;
+    
+    SELECT
+        *
+    INTO
+        emples
+    (2)
+    FROM
+        employees
+    WHERE
+        employee_id = 101;
+
+    dbms_output.put_line(emples(1).first_name);
+    dbms_output.put_line(emples(2).first_name);
+END;
