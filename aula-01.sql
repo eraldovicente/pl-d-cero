@@ -687,8 +687,7 @@ END;
 
 DECLARE
     CURSOR C1 IS SELECT * FROM REGIONS;
-    V1 REGIONS*
-rowtype;
+    V1 REGIONS%rowtype;
 
 BEGIN
     OPEN c1;
@@ -706,5 +705,15 @@ BEGIN
 
     FOR i IN c1 LOOP
         dbms_output.put_line(i.region_name);
+    END LOOP;
+END;
+
+------------------------------
+-- BUCLE FOR CON SUBQUERIES --
+------------------------------
+
+BEGIN
+    FOR I IN (SELECT * FROM REGIONS) LOOP
+        DBMS_OUTPUT.PUT_LINE(I.REGION_NAME);
     END LOOP;
 END;
