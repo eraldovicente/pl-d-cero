@@ -686,9 +686,13 @@ END;
 -----------------------------------------
 
 DECLARE
-    CURSOR C1 IS SELECT * FROM REGIONS;
-    V1 REGIONS%rowtype;
+    CURSOR c1 IS
+    SELECT
+        *
+    FROM
+        regions;
 
+    v1 regions%rowtype;
 BEGIN
     OPEN c1;
     LOOP
@@ -713,8 +717,13 @@ END;
 ------------------------------
 
 BEGIN
-    FOR I IN (SELECT * FROM REGIONS) LOOP
-        DBMS_OUTPUT.PUT_LINE(I.REGION_NAME);
+    FOR i IN (
+        SELECT
+            *
+        FROM
+            regions
+    ) LOOP
+        dbms_output.put_line(i.region_name);
     END LOOP;
 END;
 
@@ -723,17 +732,50 @@ END;
 -----------------------------
 
 DECLARE
-    CURSOR C1(SAL NUMBER) IS SELECT * FROM EMPLOYEES
-    WHERE SALARY > SAL;
-    
-    EMPL EMPLOYEES%ROWTYPE;
+    CURSOR c1 (
+        sal NUMBER
+    ) IS
+    SELECT
+        *
+    FROM
+        employees
+    WHERE
+        salary > sal;
+
+    empl employees%rowtype;
 BEGIN
-    OPEN C1(8000);
+    OPEN c1(8000);
     LOOP
-        FETCH C1 INTO EMPL;
-        EXIT WHEN C1%NOTFOUND;
-        DBMS_OUTPUT.PUT_LINE(EMPL.FIRST_NAME||' '||EMPL.SALARY);
+        FETCH c1 INTO empl;
+        EXIT WHEN c1%notfound;
+        dbms_output.put_line(empl.first_name
+                             || ' '
+                             || empl.salary);
     END LOOP;
-    DBMS_OUTPUT.PUT_LINE('HE ENCONTRADO '||C1%ROWCOUNT||' EMPLEADOS');
-    CLOSE C1;
+
+    dbms_output.put_line('HE ENCONTRADO '
+                         || c1%rowcount
+                         || ' EMPLEADOS');
+    CLOSE c1;
+END;
+
+--------------------------------------------
+-- UPDATES Y DELETES CON WHERE CURRENT OF --
+--------------------------------------------
+
+DECLARE
+    EMPL EMPLOYEES%ROWTYPE;
+    CURSOR CUR IS SELECT * FROM EMPLOYEES FOR UPDATE;
+BEGIN
+    OPEN CUR;
+    LOOP
+        FETCH CUR INTO EMPL;
+        EXIT WHEN CUR%NOTFOUND;
+        IF EMPL.COMMISSION_PCT IS NOT NULL THEN
+            UPDATE EMPLOYEES SET SALARY=SALARY*1.10 WHERE CURRENT OF CUR;
+        ELSE
+            UPDATE EMPLOYEES SET SALARY=SALARY*1.15 WHERE CURRENT OF CUR;
+        END IF;
+    END LOOP;
+    CLOSE CUR;
 END;
