@@ -764,18 +764,36 @@ END;
 --------------------------------------------
 
 DECLARE
-    EMPL EMPLOYEES%ROWTYPE;
-    CURSOR CUR IS SELECT * FROM EMPLOYEES FOR UPDATE;
+    empl employees%rowtype;
+    CURSOR cur IS
+    SELECT
+        *
+    FROM
+        employees
+    FOR UPDATE;
+
 BEGIN
-    OPEN CUR;
+    OPEN cur;
     LOOP
-        FETCH CUR INTO EMPL;
-        EXIT WHEN CUR%NOTFOUND;
-        IF EMPL.COMMISSION_PCT IS NOT NULL THEN
-            UPDATE EMPLOYEES SET SALARY=SALARY*1.10 WHERE CURRENT OF CUR;
+        FETCH cur INTO empl;
+        EXIT WHEN cur%notfound;
+        IF empl.commission_pct IS NOT NULL THEN
+            UPDATE employees
+            SET
+                salary = salary * 1.10
+            WHERE
+                CURRENT OF cur;
+
         ELSE
-            UPDATE EMPLOYEES SET SALARY=SALARY*1.15 WHERE CURRENT OF CUR;
+            UPDATE employees
+            SET
+                salary = salary * 1.15
+            WHERE
+                CURRENT OF cur;
+
         END IF;
+
     END LOOP;
-    CLOSE CUR;
+
+    CLOSE cur;
 END;
